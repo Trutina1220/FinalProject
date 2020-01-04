@@ -1,6 +1,9 @@
 import sqlite3
 import tkinter as tk
 from tkinter import messagebox, ttk
+#Thanks To Mark Arvin (https://code-projects.org/simple-inventory-system-in-python-with-source-code/)
+#for providing source code for study and reference for making this project possible
+
 
 #THE SIZE THAT WE ARE GOING TO WORK WITH (IN PIXEL)
 HEIGHT = 700
@@ -35,24 +38,25 @@ class InventorySection:
 #TITLE FRAME FOR EASY MODELLING
 class Title:
     def __init__(self,master):
-        frame_title = tk.Frame(master,bg='powder blue')
+        frame_title = tk.Frame(master,bg='#29316C')
         frame_title.place(relx=0, rely=0, relheight=0.1, relwidth=1)
 
-        self.title_label = tk.Label(frame_title, text="Inventory System", font=25, bg='grey')
-        self.title_label.place(relx=0.25, rely=0.25, relheight=0.50, relwidth=0.50)
+        self.title_label = tk.Label(frame_title, text="I N V E N T O R Y  S Y S T E M ", font=("Times New Roman",28), bg='#29316C',fg='white')
+        self.title_label.place(relx=0.05, rely=0.25, relheight=0.50, relwidth=0.90)
 
 #THE MAIN CLASS WHERE WE PUT OUR WIDGET AND ITS FUNCTION
 class Widgets:
     def __init__(self,master):
 
         self.SEARCH = tk.StringVar()  #VARIABLE TO CONTAIN THE SEARCH RESULT
-        frame_other_widgets = tk.Frame(master, bg="green") #MAKING FRAME FOR THE RIGHT SIDE OF PROGRAM
+        frame_other_widgets = tk.Frame(master, bg="#657081") #MAKING FRAME FOR THE RIGHT SIDE OF PROGRAM
         frame_other_widgets.place(relx=0.5, rely=0, relheight=1, relwidth=0.5)
 
         frame_inventory_list = tk.Frame(master, bg="black") #MAKING FRAME FOR TGE LEFT SIDE OF PROGRAM
         frame_inventory_list.place(relx=0, rely=0, relheight=1, relwidth=0.45)
 
         self.scrollbary = tk.Scrollbar(master,orient='vertical') #MAKING THE SCROLLBAR FOR THE INVENTORY SECTION
+
         #MAKING A LISTBOX TO CONTAIN ALL THE DATA FROM THE DATABASE USING TKINTER TREEVIEW , A MORE ADVANCE LISTBOX
         self.inventory_box = ttk.Treeview(frame_inventory_list,columns=("ProductID","Product Name","Product Qty","Product Price"),selectmode='extended',yscrollcommand=self.scrollbary.set)
         self.scrollbary.config(command=self.inventory_box.yview())
@@ -70,24 +74,24 @@ class Widgets:
         self.DisplayData() #CALLING THE DISPLAY DATA FUNCTION SO THAT WHEN THE PROGRAM EXCECUTE IT WILL SHOW THE INITIAL DATA
 
         #MAKING THE SEARCH BAR
-        self.search_bar = tk.Entry(frame_other_widgets, font=25,textvariable=self.SEARCH)
+        self.search_bar = tk.Entry(frame_other_widgets, textvariable=self.SEARCH,font=('times new roman',13), bd=6, bg='grey',fg='white')
         self.search_bar.place(relx=0, rely=0.1, relheight=0.05, relwidth=0.70)
         #MAKING THE SEARCH BUTTON
-        self.search_button = tk.Button(frame_other_widgets, text="Search",
+        self.search_button = tk.Button(frame_other_widgets,bg='#657081', text="Search",bd=6,font=("times new roman",13),fg='white',
                                   command=lambda:self.search())
         self.search_button.place(relx=0.75, rely=0.1, relheight=0.05, relwidth=0.23)
 
-        #MAKING THE ADD B UTTON
-        self.add_button = tk.Button(frame_other_widgets, text="Add", command=lambda: self.showAddNew())
+        #MAKING THE ADD BUTTON
+        self.add_button = tk.Button(frame_other_widgets, text="Add",bg='#657081',bd=6,font=("times new roman",13),fg='white', command=lambda: self.showAddNew())
         self.add_button.place(relx=0.75, rely=0.16, relheight=0.05, relwidth=0.23)
 
         #MAKING THE REFRESH BUTTON
-        self.refresh_button = tk.Button(frame_other_widgets, text="Refresh",
+        self.refresh_button = tk.Button(frame_other_widgets, text="Refresh",bd=6,bg='#657081',font=("times new roman",13),fg='white',
                                        command=lambda: self.refresh())
         self.refresh_button.place(relx=0.75, rely=0.22, relheight=0.05, relwidth=0.23)
 
         #MAKING THE DELETE BUTTON
-        self.delete_button = tk.Button(frame_other_widgets, text="Delete",command= lambda:self.delete()
+        self.delete_button = tk.Button(frame_other_widgets,bg='#657081',bd=6, text="Delete",font=("times new roman",13),fg='white',command= lambda:self.delete()
                                        )
         self.delete_button.place(relx=0.75, rely=0.28, relheight=0.05, relwidth=0.23)
 
@@ -185,6 +189,7 @@ class Widgets:
 
 #CALLING EACH CLASS SO THAT THE PROGRAM CAN BE RUN
 root = tk.Tk()
+root.title("Inventory System")
 canvas = Canvas(root)
 widget= Widgets(root)
 title = Title(root)
