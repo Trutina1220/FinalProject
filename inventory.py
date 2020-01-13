@@ -26,14 +26,7 @@ class Canvas:
         canvas.pack()
 
 #INVENTORY FRAME FOR EASYMODELLING
-class InventorySection:
 
-    def __init__(self,master):
-        frame_inventory_list = tk.Frame(master, bg="black")
-        frame_inventory_list.place(relx=0, rely=0, relheight=1, relwidth=0.45)
-
-        self.inventory_box = tk.Listbox(master)
-        self.inventory_box.place(relx=0, rely=0.1, relheight=1, relwidth=0.45)
 
 #TITLE FRAME FOR EASY MODELLING
 class Title:
@@ -70,7 +63,7 @@ class Widgets:
         self.inventory_box.column('#2', stretch='no', minwidth=0, width=126)
         self.inventory_box.column('#3', stretch='no', minwidth=0, width=127)
         self.inventory_box.column('#4', stretch='no', minwidth=0, width=127)
-        self.inventory_box.place(relx=0, rely=0.1, relheight=1, relwidth=1)
+        self.inventory_box.place(relx=0, rely=0.1, relheight=0.9, relwidth=1)
         self.DisplayData() #CALLING THE DISPLAY DATA FUNCTION SO THAT WHEN THE PROGRAM EXCECUTE IT WILL SHOW THE INITIAL DATA
 
         #MAKING THE SEARCH BAR
@@ -167,7 +160,7 @@ class Widgets:
     #FUNCTION TO DELETE SOMETHING INSIDE THE INVENTORY DATA
     def delete(self):
         if not self.inventory_box.selection():
-            print("ERROR")
+            messagebox.showinfo('Inventory System',"ERROR, Item not found")
         else:
             result = messagebox.askquestion('Inventory System', 'Are you sure you want to delete this record?',
                                               icon="warning")
