@@ -40,7 +40,6 @@ class Title:
 #THE MAIN CLASS WHERE WE PUT OUR WIDGET AND ITS FUNCTION
 class Widgets:
     def __init__(self,master):
-
         self.SEARCH = tk.StringVar()  #VARIABLE TO CONTAIN THE SEARCH RESULT
         frame_other_widgets = tk.Frame(master, bg="#657081") #MAKING FRAME FOR THE RIGHT SIDE OF PROGRAM
         frame_other_widgets.place(relx=0.5, rely=0, relheight=1, relwidth=0.5)
@@ -88,6 +87,12 @@ class Widgets:
                                        )
         self.delete_button.place(relx=0.75, rely=0.28, relheight=0.05, relwidth=0.23)
 
+        self.update_button = tk.Button(frame_other_widgets,bg='#657081',bd=6, text="Update",font=("times new roman",13),fg='white', command=lambda :self.show_update()
+                                       )
+        self.update_button.place(relx=0.75, rely=0.34, relheight=0.05, relwidth=0.23)
+
+
+
     #MAKING A FUNCTION THAT TAKE THE DATA FROM THE SQLITE3 DATABASE AND DISPLAY IT IN THE DISPLAYBOX
     def DisplayData(self):
         database()
@@ -127,6 +132,35 @@ class Widgets:
         add_product_button = tk.Button(addnewForm,text="Save",font=("arial",18),bg="powder blue",command=self.addNew)
         add_product_button.place(relx=0.3,rely=0.7,relwidth=0.5,relheight=0.2)
 
+    def show_update(self):
+        if not self.inventory_box.selection():
+            messagebox.showinfo('Inventory System',"ERROR, Item not found")
+        else:
+            result = messagebox.askquestion('Inventory System', 'Are you sure you want to update this record?',
+                                              icon="warning")
+            if result == 'yes':
+                selected_item = self.inventory_box.item(self.inventory_box.selection()) ['values'] [0]
+                PRODUCT_QTY = tk.IntVar()
+                PRODUCT_PRICE = tk.IntVar()
+                self.addnewForm = tk.Toplevel(width=600,height=500)
+                self.addnewForm.title("Inventory System / Add new")
+                title_frame = tk.Label(self.addnewForm,text="Add Product",anchor='n',font=("arial",18))
+                title_frame.place(relx=0,rely=0.01,relheight=0.2,relwidth=1)
+
+                product_quantity_label = tk.Label(self.addnewForm, text="Product Qty:", font=("arial", 25))
+                product_quantity_label.place(relx=0.05, rely=0.33, relheight=0.1, relwidth=0.4)
+                product_quantity_entry = tk.Entry(self.addnewForm, font=("arial", 20), textvariable=PRODUCT_QTY)
+                product_quantity_entry.place(relx=0.45, rely=0.33, relheight=0.1, relwidth=0.5)
+
+                product_price_label = tk.Label(self.addnewForm, text="Product Price:", font=("arial", 25))
+                product_price_label.place(relx=0.05, rely=0.46, relheight=0.1, relwidth=0.4)
+                product_price_entry = tk.Entry(self.addnewForm, font=("arial", 20), textvariable=PRODUCT_PRICE)
+                product_price_entry.place(relx=0.45, rely=0.46, relheight=0.1, relwidth=0.5)
+
+                add_product_button = tk.Button(self.addnewForm, text="Save", font=("arial", 18), bg="powder blue",command=lambda:self.update(PRODUCT_QTY.get(),PRODUCT_PRICE.get(),selected_item)
+                                               )
+                add_product_button.place(relx=0.3, rely=0.7, relwidth=0.5, relheight=0.2)
+
     #A FUNCTION THAT IS STORING THE NEW DATA TO THE SQLITE3 DATABASE
     def addNew(self):
         database()
@@ -138,6 +172,18 @@ class Widgets:
         PRODUCT_QTY.set("")
         cursor.close()
         conn.close()
+
+    def update(self,quantity,price,name):
+        query = "UPDATE 'product' SET product_qty=?,product_price=? WHERE product_id=?"
+        parameter = (quantity,price,name)
+        database()
+        cursor.execute(query,parameter)
+        conn.commit()
+        self.addnewForm.destroy()
+        cursor.close()
+        conn.close()
+        self.refresh()
+
 
     #FUNCTION TO REFRESH THE INVENTORY LISTBOX DATA
     def refresh(self):
